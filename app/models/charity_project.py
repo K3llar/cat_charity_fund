@@ -4,6 +4,6 @@ from app.models.base_model import BaseModel
 
 
 class CharityProject(BaseModel):
-    __mapper_args__ = {'polymorphic_identity': 'charityproject'}
+    __mapper_args__ = {'polymorphic_identity': __name__}
     name = Column(String(100), unique=True, nullable=False)
     description = Column(Text, nullable=False)
