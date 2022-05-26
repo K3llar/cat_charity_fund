@@ -5,31 +5,38 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi.encoders import jsonable_encoder
 
-from app.core.db import AsyncSessionLocal
 from app.models.charity_project import CharityProject
 from app.schemas.charity_project import CharityProjectCreate
 
 
 async def create_charity_project(
-        new_project: CharityProjectCreate
+        new_project: CharityProjectCreate,
+        session: AsyncSession,
 ) -> CharityProject:
     new_project_data = new_project.dict()
     db_project = CharityProject(**new_project_data)
-    async with AsyncSessionLocal() as session:
-        session.add(db_project)
-        await session.commit()
-        await session.refresh(db_project)
+    session.add(db_project)
+    await session.commit()
+    await session.refresh(db_project)
     return db_project
 
 
 async def get_project_id_by_name(
-        project_name: str
+        project_name: str,
+        session: AsyncSession,
 ) -> Optional[int]:
-    async with AsyncSessionLocal() as session:
-        db_project_id = await session.execute(
+    db_project_id = await session.execute(
             select(CharityProject.id).where(
                 CharityProject.name == project_name
             )
         )
-        db_project_id = db_project_id.scalars().first()
+    db_project_id = db_project_id.scalars().first()
     return db_project_id
+
+
+async def get_all_charity_projects_from_db(
+        session: AsyncSession
+) -> list[CharityProject]:
+    all_projects = await session.execute(select(CharityProject))
+    all_projects = all_projects.scalars().all()
+    return all_projects
