@@ -54,3 +54,17 @@ async def check_charity_project_before_edit(
 #                 status_code=422,
 #                 detail=f'Поле {field} не может быть пустым'
 #             )
+
+
+async def check_charity_project_invested_amount(
+        charity_project_id: int,
+        session: AsyncSession
+):
+    charity_project = await get_charity_project_by_id(
+        charity_project_id, session
+    )
+    if charity_project.invested_amount != 0:
+        raise HTTPException(
+            status_code=422,
+            detail='Нельзя удалить проект с начавшимся сбором средств!'
+        )

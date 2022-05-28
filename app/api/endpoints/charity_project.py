@@ -6,12 +6,15 @@ from app.core.db import get_async_session
 from app.crud.charity_project import (create_charity_project,
                                       get_project_id_by_name,
                                       get_all_charity_projects_from_db,
-                                      update_charity_project)
+                                      update_charity_project,
+                                      delete_charity_project)
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectUpdate,
                                          CharityProjectDB)
 from app.api.validators import (check_name_duplicate,
-                                check_charity_project_before_edit)
+                                check_charity_project_before_edit,
+                                check_charity_project_exists,
+                                check_charity_project_invested_amount)
 
 router = APIRouter()
 
@@ -63,5 +66,24 @@ async def partially_update_charity_project(
 
     charity_project = await update_charity_project(
         charity_project, obj_in, session
+    )
+    return charity_project
+
+
+@router.delete('/{charity_project_id}',
+               response_model=CharityProjectDB,
+               response_model_exclude_none=True)
+async def remove_charity_project(
+        charity_project_id: int,
+        session: AsyncSession = Depends(get_async_session),
+):
+    charity_project = await check_charity_project_exists(
+        charity_project_id, session
+    )
+    await check_charity_project_invested_amount(
+        charity_project_id, session
+    )
+    charity_project = await delete_charity_project(
+        charity_project, session
     )
     return charity_project
