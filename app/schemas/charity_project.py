@@ -21,6 +21,12 @@ class CharityProjectUpdate(CharityProjectBase):
     pass
 
     # @root_validator(skip_on_failure=True)
+    # def check_field_names(cls, values):
+    #     names = ('description', 'name', 'full_amount')
+    #     for value in values:
+    #         if value not in names:
+    #             raise HT
+    # @root_validator(skip_on_failure=True)
     # def check_fields(cls, values):
     #     for value in values:
     #         if values[value] is None:

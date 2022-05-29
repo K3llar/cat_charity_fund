@@ -15,8 +15,8 @@ async def check_name_duplicate(
                                               session)
     if project_id:
         raise HTTPException(
-            status_code=422,
-            detail='Проект с таким названием уже существует!'
+            status_code=400,
+            detail='Проект с таким именем уже существует!'
         )
 
 
@@ -42,18 +42,12 @@ async def check_charity_project_before_edit(
     charity_project = await check_charity_project_exists(
         charity_project_id, session
     )
+    if charity_project.fully_invested is True:
+        raise HTTPException(
+            status_code=400,
+            detail='Закрытый проект нельзя редактировать!'
+        )
     return charity_project
-
-
-# async def check_fields_in_dict(
-#         dictionary: dict,
-# ):
-#     for field in dictionary:
-#         if dictionary[field] is None:
-#             raise HTTPException(
-#                 status_code=422,
-#                 detail=f'Поле {field} не может быть пустым'
-#             )
 
 
 async def check_charity_project_invested_amount(

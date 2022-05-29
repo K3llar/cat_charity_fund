@@ -11,13 +11,17 @@ from app.schemas.donation import DonationCreate, DonationDB
 from app.schemas.user import UserDB
 from app.services.invest import check_charity_projects_for_investing
 
-
 router = APIRouter()
 
 
 @router.post('/',
              response_model=DonationDB,
-             response_model_exclude_none=True,)
+             response_model_exclude_none=True,
+             response_model_exclude={
+                 'user_id',
+                 'fully_invested',
+                 'invested_amount',
+             })
 async def create_new_donation(
         donation: DonationCreate,
         session: AsyncSession = Depends(get_async_session),
@@ -43,7 +47,12 @@ async def get_all_donations(
 
 @router.get('/my',
             response_model=list[DonationDB],
-            response_model_exclude={'user_id'})
+            response_model_exclude={
+                'user_id',
+                'close_date',
+                'fully_invested',
+                'invested_amount',
+            })
 async def get_my_donations(
         session: AsyncSession = Depends(get_async_session),
         user: UserDB = Depends(current_user),

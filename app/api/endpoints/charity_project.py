@@ -62,7 +62,7 @@ async def partially_update_charity_project(
     Сумма для сбора средств может корректироваться только в
     сторону увеличения
     """
-    charity_project = await check_charity_project_exists(
+    charity_project = await check_charity_project_before_edit(
         charity_project_id, session
     )
 

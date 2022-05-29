@@ -1,8 +1,8 @@
-"""create relation donation to user
+"""Create relationship user to donation
 
-Revision ID: c432acced030
-Revises: 6b04f99c233d
-Create Date: 2022-05-29 13:28:08.118768
+Revision ID: bf0e3f993f52
+Revises: b9cdc3a57d30
+Create Date: 2022-05-29 14:11:06.978508
 
 """
 from alembic import op
@@ -11,8 +11,8 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = 'c432acced030'
-down_revision = '6b04f99c233d'
+revision = 'bf0e3f993f52'
+down_revision = 'b9cdc3a57d30'
 branch_labels = None
 depends_on = None
 
