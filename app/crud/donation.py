@@ -1,10 +1,5 @@
-from typing import Optional
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from fastapi import HTTPException
-from fastapi.encoders import jsonable_encoder
 
 from app.models.donation import Donation
 from app.schemas.donation import DonationCreate

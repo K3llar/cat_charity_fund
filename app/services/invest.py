@@ -15,7 +15,7 @@ async def check_charity_projects_for_investing(
     while new_donation.fully_invested is False:
         db_charity_project = await session.execute(
             select(CharityProject).where(
-                CharityProject.fully_invested == False
+                CharityProject.fully_invested == False # noqa
             )
         )
         db_charity_project = db_charity_project.scalars().first()
@@ -37,7 +37,7 @@ async def check_donations_for_investing(
     while new_project.fully_invested is False:
         db_donation = await session.execute(
             select(Donation).where(
-                Donation.fully_invested == False
+                Donation.fully_invested == False # noqa
             )
         )
         db_donation = db_donation.scalars().first()

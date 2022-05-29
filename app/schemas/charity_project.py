@@ -2,7 +2,7 @@ import datetime as dt
 
 from typing import Optional
 
-from pydantic import BaseModel, Field, PositiveInt, root_validator, validator
+from pydantic import BaseModel, Field, PositiveInt
 
 
 class CharityProjectBase(BaseModel):
@@ -19,25 +19,6 @@ class CharityProjectCreate(BaseModel):
 
 class CharityProjectUpdate(CharityProjectBase):
     pass
-
-    # @root_validator(skip_on_failure=True)
-    # def check_field_names(cls, values):
-    #     names = ('description', 'name', 'full_amount')
-    #     for value in values:
-    #         if value not in names:
-    #             raise HT
-    # @root_validator(skip_on_failure=True)
-    # def check_fields(cls, values):
-    #     for value in values:
-    #         if values[value] is None:
-    #             raise ValueError(f'Поле {value} не может быть пустым')
-    #     return values
-
-    # @validator('name')
-    # def name_cant_be_null(cls, value: str):
-    #     if value is None:
-    #         raise ValueError('Имя не может быть пустым!')
-    #     return value
 
 
 class CharityProjectDB(CharityProjectBase):

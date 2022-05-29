@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import (create_charity_project,
-                                      get_project_id_by_name,
                                       get_all_charity_projects_from_db,
                                       update_charity_project,
                                       delete_charity_project)
