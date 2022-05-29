@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     description: str = ('Приложение создано для сбора пожертвований '
                         'на различные целевые проекта поддержки '
                         'наших хвостатых друзей.')
-    database_url: str
+    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
     secret: str = 'SECRET'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
