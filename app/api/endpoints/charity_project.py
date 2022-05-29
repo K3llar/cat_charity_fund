@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
+from app.core.user import current_superuser
 from app.crud.charity_project import (create_charity_project,
                                       get_project_id_by_name,
                                       get_all_charity_projects_from_db,
@@ -22,11 +23,13 @@ router = APIRouter()
 
 @router.post('/',
              response_model=CharityProjectDB,
-             response_model_exclude_none=True)
+             response_model_exclude_none=True,
+             dependencies=[Depends(current_superuser)])
 async def create_new_charity_project(
         charity_project: CharityProjectCreate,
         session: AsyncSession = Depends(get_async_session)
 ):
+    """Создание проектов доступно только для суперюзера"""
     await check_name_duplicate(charity_project.name, session)
     new_project = await create_charity_project(charity_project,
                                                session)
@@ -47,13 +50,19 @@ async def get_all_charity_projects(
 
 @router.patch('/{charity_project_id}',
               response_model=CharityProjectDB,
-              response_model_exclude_none=True, )
+              response_model_exclude_none=True,
+              dependencies=[Depends(current_superuser)])
 async def partially_update_charity_project(
         charity_project_id: int,
         obj_in: CharityProjectUpdate,
         session: AsyncSession = Depends(get_async_session),
 ):
-    charity_project = await check_charity_project_before_edit(
+    """
+    Редактирование проектов возможно только для суперюзера
+    Сумма для сбора средств может корректироваться только в
+    сторону увеличения
+    """
+    charity_project = await check_charity_project_exists(
         charity_project_id, session
     )
 
@@ -75,11 +84,16 @@ async def partially_update_charity_project(
 
 @router.delete('/{charity_project_id}',
                response_model=CharityProjectDB,
-               response_model_exclude_none=True)
+               response_model_exclude_none=True,
+               dependencies=[Depends(current_superuser)])
 async def remove_charity_project(
         charity_project_id: int,
         session: AsyncSession = Depends(get_async_session),
 ):
+    """
+    Удаление проектов доступно только для супер юзера
+    Удаление проектов с начавшимся сборов средств невозможно
+    """
     charity_project = await check_charity_project_exists(
         charity_project_id, session
     )
