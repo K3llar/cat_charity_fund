@@ -60,12 +60,18 @@ async def update_charity_project(
 ) -> CharityProject:
     obj_data = jsonable_encoder(db_project)
     update_data = project_in.dict(exclude_unset=True)
-    for field in update_data:
-        if update_data[field] is None:
-            raise HTTPException(
-                status_code=422,
-                detail=f'Поле {field} не может быть пустым!'
-            )
+    if update_data:
+        for field in update_data:
+            if update_data[field] is None:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f'Поле {field} не может быть пустым!'
+                )
+    else:
+        raise HTTPException(
+            status_code=422,
+            detail='Запрос не может быть пустым'
+        )
     for field in obj_data:
         if field in update_data:
             setattr(db_project, field, update_data[field])
