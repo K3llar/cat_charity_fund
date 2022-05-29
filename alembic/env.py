@@ -15,7 +15,12 @@ from app.core.base import Base
 load_dotenv('env.template')
 config = context.config
 
-config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
+# config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
+config.set_main_option(
+    'sqlalchemy.url',
+    os.getenv('DATABASE_URL', default='sqlite+aiosqlite:///./fastapi.db')
+)
+
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
