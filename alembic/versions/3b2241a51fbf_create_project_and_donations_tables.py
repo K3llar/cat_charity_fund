@@ -1,7 +1,7 @@
 """Create Project and Donations tables
 
 Revision ID: 3b2241a51fbf
-Revises: 
+Revises:
 Create Date: 2022-05-29 19:39:52.890567
 
 """
