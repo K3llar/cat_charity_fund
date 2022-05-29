@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     first_superuser_password: Union[None, str] = None
 
     class Config:
-        env_file = 'env.template'
+        env_file = '.env'
 
 
 settings = Settings()
