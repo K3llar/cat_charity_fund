@@ -15,6 +15,7 @@ from app.api.validators import (check_name_duplicate,
                                 check_charity_project_before_edit,
                                 check_charity_project_exists,
                                 check_charity_project_invested_amount)
+from app.services.invest import check_donations_for_investing
 
 router = APIRouter()
 
@@ -29,12 +30,14 @@ async def create_new_charity_project(
     await check_name_duplicate(charity_project.name, session)
     new_project = await create_charity_project(charity_project,
                                                session)
+    new_project = await check_donations_for_investing(new_project,
+                                                      session)
     return new_project
 
 
 @router.get('/',
             response_model=list[CharityProjectDB],
-            response_model_exclude_none=True, )
+            response_model_exclude_none=True,)
 async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session)
 ):
