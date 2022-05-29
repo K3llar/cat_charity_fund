@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,7 +38,7 @@ async def get_project_id_by_name(
 
 async def get_all_charity_projects_from_db(
         session: AsyncSession
-) -> list[CharityProject]:
+) -> List[CharityProject]:
     all_projects = await session.execute(select(CharityProject))
     all_projects = all_projects.scalars().all()
     return all_projects

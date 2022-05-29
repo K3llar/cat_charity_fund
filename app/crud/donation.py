@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,7 +25,7 @@ async def create_donation(
 
 async def get_all_donations_from_db(
         session: AsyncSession
-) -> list[Donation]:
+) -> List[Donation]:
     all_donations = await session.execute(select(Donation))
     all_donations = all_donations.scalars().all()
     return all_donations
