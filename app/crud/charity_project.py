@@ -1,5 +1,7 @@
 from typing import Optional, List
 
+from http import HTTPStatus
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -64,12 +66,12 @@ async def update_charity_project(
         for field in update_data:
             if update_data[field] is None:
                 raise HTTPException(
-                    status_code=422,
+                    status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
                     detail=f'Поле {field} не может быть пустым!'
                 )
     else:
         raise HTTPException(
-            status_code=422,
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Запрос не может быть пустым'
         )
     for field in obj_data:

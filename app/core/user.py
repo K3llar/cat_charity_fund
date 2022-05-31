@@ -1,3 +1,6 @@
+import logging
+import os
+
 from typing import Optional, Union
 
 from fastapi import Depends, Request
@@ -14,6 +17,18 @@ from app.core.config import settings
 from app.core.db import get_async_session
 from app.models.user import UserTable
 from app.schemas.user import User, UserCreate, UserDB, UserUpdate
+
+
+LOG_FORMAT = '%(asctime)s, %(levelname)s, %(message)s, %(name)s'
+LOG_NAME = os.path.join(os.getcwd(), 'cat_charity.log')
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    filename=LOG_NAME,
+    format=LOG_FORMAT
+)
+logger = logging.getLogger(__name__)
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
@@ -56,7 +71,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
     async def on_after_register(
             self, user: UserDB, request: Optional[Request] = None
     ):
-        print(f'Пользователь {user.email} был зарегистрирован')
+        logger.info(f'Пользователь {user.email} был зарегистрирован')
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

@@ -1,5 +1,7 @@
 from typing import List
 
+from http import HTTPStatus
+
 from fastapi import APIRouter, HTTPException, Depends
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -73,7 +75,7 @@ async def partially_update_charity_project(
     if obj_in.full_amount is not None:
         if obj_in.full_amount <= charity_project.invested_amount:
             raise HTTPException(
-                status_code=422,
+                status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
                 detail='Нельзя внести сумму меньше текущей!'
             )
 
